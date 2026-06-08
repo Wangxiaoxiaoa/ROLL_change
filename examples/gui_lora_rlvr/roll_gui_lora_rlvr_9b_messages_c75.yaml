@@ -1,0 +1,158 @@
+defaults:
+  - ../config/deepspeed_zero@_here_
+  - ../config/deepspeed_zero2@_here_
+  - ../config/deepspeed_zero3@_here_
+  - ../config/deepspeed_zero3_cpuoffload@_here_
+  - _self_
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+exp_name: gui_lora_rlvr_9b_messages_c75
+seed: 42
+logging_dir: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/output/logs
+output_dir: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/output/checkpoints/${exp_name}
+rollout_dump_dir: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/output/rollouts/${exp_name}
+save_logging_board_dir: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/output/board/${exp_name}
+
+checkpoint_config:
+  type: file_system
+  output_dir: ${output_dir}
+
+track_with: tensorboard
+tracker_kwargs:
+  log_dir: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/output/tensorboard/${exp_name}
+
+num_gpus_per_node: 8
+max_steps: 500
+save_steps: 50
+logging_steps: 1
+eval_steps: 1000000
+resume_from_checkpoint: false
+
+# Keep the expanded GRPO batch divisible by the 7 actor DP ranks:
+# 7 prompts * 16 responses = 112 trajectories = 16 trajectories per rank.
+rollout_batch_size: 7
+num_return_sequences_in_group: 16
+is_num_return_sequences_expand: true
+prompt_length: 32768
+response_length: 2048
+sequence_length: 34816
+max_len_mask: true
+
+ppo_epochs: 1
+adv_estimator: grpo
+reward_clip: 10
+advantage_clip: 10.0
+whiten_advantages: false
+norm_mean_type: group
+norm_std_type: group
+init_kl_coef: 0.0
+add_token_level_kl: false
+use_kl_loss: false
+kl_loss_coef: 0.0
+enable_reference: false
+force_disable_old_logprobs_recompute: true
+loss_agg_mode: seq-mean-token-mean
+
+lora_target: q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj
+lora_rank: 64
+lora_alpha: 128
+
+pretrain: /mnt/data1/outputs/qwen3.5-9B-gui-lora-sft-llamafactory-remote1-8gpu-sdpa-full-len65536-no-cot-after-cot/models
+reward_pretrain: ${pretrain}
+
+actor_train:
+  worker_cls: roll.pipeline.rlvr.actor_worker.ActorWorker
+  model_args:
+    attn_implementation: fa2
+    disable_gradient_checkpointing: false
+    dtype: bf16
+    lora_target: ${lora_target}
+    lora_rank: ${lora_rank}
+    lora_alpha: ${lora_alpha}
+    model_type: null
+    max_pixels: 1048576
+    min_pixels: 3136
+  training_args:
+    learning_rate: 1.0e-6
+    weight_decay: 0.001
+    adam_beta1: 0.9
+    adam_beta2: 0.99
+    per_device_train_batch_size: 2
+    gradient_accumulation_steps: 8
+    warmup_steps: 0
+    num_train_epochs: 1
+  data_args:
+    file_name: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/data/rl_compressed_v1_messages_prompt_jpeg75.jsonl
+    domain_interleave_probs:
+      gui_lora_rlvr: 1.0
+    dataset_dir: ./
+    preprocessing_num_workers: 32
+    cache_path: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/data/cache/rl_compressed_v1_messages_prompt_jpeg75
+  strategy_args:
+    strategy_name: deepspeed_train
+    strategy_config:
+      train_micro_batch_size_per_gpu: auto
+      bf16:
+        enabled: true
+      fp16:
+        enabled: false
+      zero_optimization:
+        stage: 0
+  device_mapping: list(range(1,8))
+  infer_batch_size: 1
+
+actor_infer:
+  model_args:
+    attn_implementation: sdpa
+    disable_gradient_checkpointing: true
+    dtype: bf16
+    lora_target: ${lora_target}
+    lora_rank: ${lora_rank}
+    lora_alpha: ${lora_alpha}
+    max_pixels: 1048576
+    min_pixels: 3136
+  generating_args:
+    max_new_tokens: ${response_length}
+    top_p: 0.99
+    top_k: 100
+    num_beams: 1
+    temperature: 0.99
+    num_return_sequences: ${num_return_sequences_in_group}
+  strategy_args:
+    strategy_name: vllm
+    strategy_config:
+      gpu_memory_utilization: 0.8
+      enforce_eager: true
+      block_size: 16
+      max_model_len: ${sequence_length}
+      enable_prefix_caching: false
+      mm_processor_cache_gb: 0
+      VLLM_USE_V1: 1
+  num_gpus_per_worker: 1
+  device_mapping: "[0]"
+  infer_batch_size: 1
+
+reference:
+  model_args:
+    attn_implementation: sdpa
+    disable_gradient_checkpointing: true
+    dtype: bf16
+    model_type: null
+  strategy_args:
+    strategy_name: hf_infer
+    strategy_config: {}
+  device_mapping: "[]"
+  infer_batch_size: 1
+
+rewards:
+  gui_lora_rlvr:
+    worker_cls: gui_lora_rlvr.gui_reward_worker.GuiLoraRlvrRewardWorker
+    model_args:
+      model_name_or_path: ${pretrain}
+    tag_included: [gui_lora_rlvr]
+    world_size: 1
+    infer_batch_size: 1

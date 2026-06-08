@@ -1,0 +1,736 @@
+{
+  "dataset": "/mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/data/rl_compressed_v1_messages_prompt.jsonl",
+  "model": "/mnt/data1/outputs/qwen3.5-9B-gui-lora-sft-llamafactory-remote1-8gpu-sdpa-full-len65536-cot/models",
+  "count": 142163,
+  "min": 1936,
+  "max": 8891,
+  "mean": 5015.247314702137,
+  "p50": 6139,
+  "p90": 6575,
+  "p95": 6727,
+  "p99": 7085,
+  "p999": 7540,
+  "count_gt": {
+    "4096": 102533,
+    "6144": 71075,
+    "8192": 5,
+    "12288": 0,
+    "16384": 0,
+    "32768": 0
+  },
+  "image_counts": {
+    "1": 20017,
+    "2": 19441,
+    "3": 16419,
+    "4": 14247,
+    "5": 72039
+  },
+  "unique_images": 142163,
+  "patch_size": 16,
+  "merge_size": 2,
+  "resize_factor": 32,
+  "min_pixels": 3136,
+  "max_pixels": 1048576,
+  "top": [
+    {
+      "index": 121539,
+      "length": 8891,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step016_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step017_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step018_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step019_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I tried writing a game code in Writer. Please take a look at the entire code and tell me where you think it can be optimized and improved. Also, help me open the \"html\" folder in the computer's Videos directory with VScode, write a new game code in this folder for me to learn, save the code as \"newg"
+    },
+    {
+      "index": 121538,
+      "length": 8854,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step014_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step016_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step017_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step018_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I tried writing a game code in Writer. Please take a look at the entire code and tell me where you think it can be optimized and improved. Also, help me open the \"html\" folder in the computer's Videos directory with VScode, write a new game code in this folder for me to learn, save the code as \"newg"
+    },
+    {
+      "index": 121537,
+      "length": 8839,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step013_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step014_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step016_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step017_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I tried writing a game code in Writer. Please take a look at the entire code and tell me where you think it can be optimized and improved. Also, help me open the \"html\" folder in the computer's Videos directory with VScode, write a new game code in this folder for me to learn, save the code as \"newg"
+    },
+    {
+      "index": 121536,
+      "length": 8828,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step012_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step013_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step014_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018831_step016_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I tried writing a game code in Writer. Please take a look at the entire code and tell me where you think it can be optimized and improved. Also, help me open the \"html\" folder in the computer's Videos directory with VScode, write a new game code in this folder for me to learn, save the code as \"newg"
+    },
+    {
+      "index": 111738,
+      "length": 8376,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018305_step025_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018305_step026_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018305_step027_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018305_step028_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018305_step029_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Please help me create a new folder \"Profile\" in the computer's Music. Then use Google to obtain the career profiles of Wang Baoqiang and Huang Bo. Next, create a new writer document and input the two obtained career profiles into it respectively."
+    },
+    {
+      "index": 128089,
+      "length": 8155,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step020_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step021_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step022_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step023_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step024_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I need to complete the writing of two codes. The requirements have been written in the current document. Please read the document, open VSCode, create two blank text files, select the language according to the document requirements, write the corresponding codes into the files, and save the written "
+    },
+    {
+      "index": 128088,
+      "length": 8122,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step019_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step020_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step021_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step022_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step023_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I need to complete the writing of two codes. The requirements have been written in the current document. Please read the document, open VSCode, create two blank text files, select the language according to the document requirements, write the corresponding codes into the files, and save the written "
+    },
+    {
+      "index": 128087,
+      "length": 8084,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step018_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step019_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step020_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step021_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step022_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I need to complete the writing of two codes. The requirements have been written in the current document. Please read the document, open VSCode, create two blank text files, select the language according to the document requirements, write the corresponding codes into the files, and save the written "
+    },
+    {
+      "index": 137518,
+      "length": 8077,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step044_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step045_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step046_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step047_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step048_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I have two pieces of confused data \"A,0.3, 0.6, 0.8, 1.1\" and \"B 0.3 0.5 0.8 1.2\". Help me create a new xlsx file with \"Experimental group\",\"1 hour\",\"2 hour\",\"3 hour\", and \"4 hour\" as the first line headers. Separate the two pieces of chaotic data in the second and third rows with comma and space se"
+    },
+    {
+      "index": 128086,
+      "length": 8065,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step017_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step018_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step019_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step020_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019187_step021_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I need to complete the writing of two codes. The requirements have been written in the current document. Please read the document, open VSCode, create two blank text files, select the language according to the document requirements, write the corresponding codes into the files, and save the written "
+    },
+    {
+      "index": 118581,
+      "length": 8062,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step051_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step052_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step053_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step054_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step055_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the bookmark \"Feishu\" in the chrome bookmark bar, find the second contact in the message, search for the docx document \"Wish\" and download it on the desktop, open the file, add a line to the beginning and enter the title \"Wish\". The title of the first line is centered and the distance is 0.3 fr"
+    },
+    {
+      "index": 109893,
+      "length": 8060,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step013_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step014_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step016_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step017_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the \"/home/user/Java\" folder in VS Code, and create a \"BarChartSwing.java\" file, which is used to write code to display the array in the form of a column chart. Debug the code when you are finished."
+    },
+    {
+      "index": 109892,
+      "length": 8038,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step012_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step013_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step014_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step015_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018210_step016_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the \"/home/user/Java\" folder in VS Code, and create a \"BarChartSwing.java\" file, which is used to write code to display the array in the form of a column chart. Debug the code when you are finished."
+    },
+    {
+      "index": 137517,
+      "length": 8038,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step043_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step044_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step045_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step046_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step047_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I have two pieces of confused data \"A,0.3, 0.6, 0.8, 1.1\" and \"B 0.3 0.5 0.8 1.2\". Help me create a new xlsx file with \"Experimental group\",\"1 hour\",\"2 hour\",\"3 hour\", and \"4 hour\" as the first line headers. Separate the two pieces of chaotic data in the second and third rows with comma and space se"
+    },
+    {
+      "index": 118580,
+      "length": 8030,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step050_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step051_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step052_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step053_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step054_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the bookmark \"Feishu\" in the chrome bookmark bar, find the second contact in the message, search for the docx document \"Wish\" and download it on the desktop, open the file, add a line to the beginning and enter the title \"Wish\". The title of the first line is centered and the distance is 0.3 fr"
+    },
+    {
+      "index": 137516,
+      "length": 8008,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step042_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step043_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step044_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step045_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step046_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I have two pieces of confused data \"A,0.3, 0.6, 0.8, 1.1\" and \"B 0.3 0.5 0.8 1.2\". Help me create a new xlsx file with \"Experimental group\",\"1 hour\",\"2 hour\",\"3 hour\", and \"4 hour\" as the first line headers. Separate the two pieces of chaotic data in the second and third rows with comma and space se"
+    },
+    {
+      "index": 118579,
+      "length": 7997,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step049_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step050_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step051_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step052_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step053_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the bookmark \"Feishu\" in the chrome bookmark bar, find the second contact in the message, search for the docx document \"Wish\" and download it on the desktop, open the file, add a line to the beginning and enter the title \"Wish\". The title of the first line is centered and the distance is 0.3 fr"
+    },
+    {
+      "index": 118578,
+      "length": 7971,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step048_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step049_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step050_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step051_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step052_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the bookmark \"Feishu\" in the chrome bookmark bar, find the second contact in the message, search for the docx document \"Wish\" and download it on the desktop, open the file, add a line to the beginning and enter the title \"Wish\". The title of the first line is centered and the distance is 0.3 fr"
+    },
+    {
+      "index": 137515,
+      "length": 7969,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step041_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step042_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step043_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step044_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_019684_step045_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "I have two pieces of confused data \"A,0.3, 0.6, 0.8, 1.1\" and \"B 0.3 0.5 0.8 1.2\". Help me create a new xlsx file with \"Experimental group\",\"1 hour\",\"2 hour\",\"3 hour\", and \"4 hour\" as the first line headers. Separate the two pieces of chaotic data in the second and third rows with comma and space se"
+    },
+    {
+      "index": 118577,
+      "length": 7944,
+      "image_count": 5,
+      "images": [
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step047_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step048_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step049_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step050_c75.png",
+        "/mnt/data1/datas/rl_train_datas_cot10_first_half/images_compressed_75/traj_018672_step051_c75.png"
+      ],
+      "processed_sizes": [
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ],
+        [
+          1344,
+          768
+        ]
+      ],
+      "instruction": "Open the bookmark \"Feishu\" in the chrome bookmark bar, find the second contact in the message, search for the docx document \"Wish\" and download it on the desktop, open the file, add a line to the beginning and enter the title \"Wish\". The title of the first line is centered and the distance is 0.3 fr"
+    }
+  ]
+}

@@ -219,10 +219,16 @@ def log_probs_from_logits(logits: torch.Tensor, labels: torch.Tensor) -> torch.T
 
 def entropy_from_logits(logits: torch.Tensor):
     """Calculate entropy from logits."""
-    logits = logits.float()
-    pd = torch.nn.functional.softmax(logits, dim=-1)
-    entropy = torch.logsumexp(logits, dim=-1) - torch.sum(pd * logits, dim=-1)
-    return entropy
+    chunk_size = 4096
+    output_shape = logits.shape[:-1]
+    logits = logits.reshape(-1, logits.shape[-1])
+    entropy_list = []
+    for i in range(0, logits.shape[0], chunk_size):
+        logits_chunk = logits[i:i + chunk_size].float()
+        pd_chunk = torch.nn.functional.softmax(logits_chunk, dim=-1)
+        entropy_chunk = torch.logsumexp(logits_chunk, dim=-1) - torch.sum(pd_chunk * logits_chunk, dim=-1)
+        entropy_list.append(entropy_chunk)
+    return torch.cat(entropy_list, dim=0).reshape(output_shape)
 
 
 def agg_loss(loss_mat: torch.Tensor, loss_mask: torch.Tensor, loss_agg_mode: str, batch_num_tokens: int = None,
@@ -249,6 +255,11 @@ def agg_loss(loss_mat: torch.Tensor, loss_mask: torch.Tensor, loss_agg_mode: str
         batch_num_tokens = loss_mask.sum()
     if global_valid_samples is None:
         global_valid_samples = loss_mat.size(0)
+
+    # 预先转换为 float32，避免后续计算中反复转换产生临时张量
+    loss_mat = loss_mat.float()
+    loss_mask = loss_mask.float()
+
     if loss_agg_mode == "token-mean":
         if weights is None:
             weights = torch.ones(loss_mask.shape[0], device=loss_mask.device)
@@ -1329,4 +1340,3 @@ def batch_balance(batch: DataProto, dp_size, minibatch_size, logging_prefix="glo
     metrics = {}
     metrics.update(global_balance_stats)
     return metrics
-

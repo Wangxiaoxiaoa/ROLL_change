@@ -1,6 +1,7 @@
 from collections import defaultdict
 from contextlib import nullcontext
 from datetime import timedelta
+import inspect
 from typing import Callable, Dict, Tuple
 
 import deepspeed
@@ -53,6 +54,52 @@ class DeepSpeedInferStrategy(InferenceStrategy):
             self.worker.pipeline_config.max_grad_norm
         )
         self.ds_config = HfDeepSpeedConfig(self.worker_config.strategy_args.strategy_config)
+        self._supported_forward_kwargs = None
+
+    def _get_supported_forward_kwargs(self):
+        if self._supported_forward_kwargs is not None:
+            return self._supported_forward_kwargs
+
+        supported = set()
+        model = self.unwrap_model()
+        candidates = [model]
+        if hasattr(model, "get_base_model"):
+            candidates.append(model.get_base_model())
+        base_model = getattr(model, "base_model", None)
+        if base_model is not None:
+            candidates.append(base_model)
+            nested_model = getattr(base_model, "model", None)
+            if nested_model is not None:
+                candidates.append(nested_model)
+
+        for candidate in candidates:
+            forward = getattr(candidate, "forward", None)
+            if forward is None:
+                continue
+            try:
+                supported.update(inspect.signature(forward).parameters.keys())
+            except (TypeError, ValueError):
+                continue
+
+        self._supported_forward_kwargs = supported
+        return supported
+
+    def _add_logits_to_keep_arg(self, forward_args: Dict, data: DataProto, input_ids: torch.Tensor):
+        if self.worker.rank_info.cp_size > 1:
+            return
+        if "logits_to_keep" in forward_args or "num_logits_to_keep" in forward_args:
+            return
+        response_mask = data.batch.get("response_mask")
+        if response_mask is None or response_mask.numel() == 0:
+            return
+
+        logits_to_keep = int(response_mask.sum(dim=1).max().item()) + 1
+        logits_to_keep = max(2, min(logits_to_keep, input_ids.shape[-1]))
+        supported = self._get_supported_forward_kwargs()
+        if "logits_to_keep" in supported:
+            forward_args["logits_to_keep"] = logits_to_keep
+        elif "num_logits_to_keep" in supported:
+            forward_args["num_logits_to_keep"] = logits_to_keep
 
     def initialize(self, model_provider):
         set_seed(seed=self.worker.pipeline_config.seed)
@@ -157,7 +204,7 @@ class DeepSpeedInferStrategy(InferenceStrategy):
                 input_ids = data.batch["input_ids"]
                 attention_mask = data.batch["attention_mask"]
                 position_ids = data.batch["position_ids"]
-                forward_args = data.meta_info.get("forward_args", {})
+                forward_args = dict(data.meta_info.get("forward_args", {}))
                 if position_ids.dim() == 3:
                     # same as megatron to be compatible with fsdp packing which change position_ids.size(1) to 4
                     if position_ids.size(1) == 4:
@@ -183,6 +230,8 @@ class DeepSpeedInferStrategy(InferenceStrategy):
                     input_ids = splited_features["input_ids"]
                     attention_mask = splited_features["attention_mask"]
                     position_ids = splited_features["position_ids"]
+
+                self._add_logits_to_keep_arg(forward_args, data, input_ids)
 
                 # set use_cache=False manually for the same reason as HfInferStrategy
                 output = self.model(
@@ -253,6 +302,8 @@ class DeepSpeedInferStrategy(InferenceStrategy):
 
     # offload/load 相关接口
     def load_states(self, include=None, non_blocking=False):
+        if self.ds_config._stage == 0:
+            return
         if include is not None:
             ds_include = []
             if OffloadStateType.model_params in include:
@@ -267,6 +318,9 @@ class DeepSpeedInferStrategy(InferenceStrategy):
         self.model.reload_states(include=include, non_blocking=non_blocking)
 
     def offload_states(self, include=None, non_blocking=False):
+        if self.ds_config._stage == 0:
+            current_platform.empty_cache()
+            return
         if include is not None:
             ds_include = []
             if OffloadStateType.model_params in include:
@@ -293,7 +347,13 @@ class DeepSpeedInferStrategy(InferenceStrategy):
         labels = torch.cat([labels, torch.zeros_like(labels[:, :1])], dim=1)
         if self.worker.rank_info.cp_size > 1:
             labels = self.get_feature_on_cp_rank(labels)["input_ids"]
+
+        full_log_prob_shape = labels.shape
+        if logits.shape[1] != labels.shape[1]:
+            labels = labels[:, -logits.shape[1]:]
+            attention_mask = attention_mask[:, -logits.shape[1]:]
         log_probs = log_probs_from_logits(logits, labels)
+
         if self.worker.rank_info.cp_size > 1:
             with torch.no_grad():
                 all_log_probs = [torch.empty_like(log_probs) for _ in range(self.worker.rank_info.cp_size)]
@@ -301,9 +361,16 @@ class DeepSpeedInferStrategy(InferenceStrategy):
             all_log_probs[self.worker.rank_info.cp_rank] = log_probs
             log_probs = torch.cat(all_log_probs, dim=1)
         log_probs = log_probs[:, :-1] * attention_mask[:, 1:]
+        if log_probs.shape[1] != full_log_prob_shape[1] - 1:
+            full_log_probs = log_probs.new_zeros((log_probs.shape[0], full_log_prob_shape[1] - 1))
+            full_log_probs[:, -log_probs.shape[1]:] = log_probs
+            log_probs = full_log_probs
         return log_probs
 
     def op_compute_entropy(self, logits: torch.Tensor, attention_mask: torch.Tensor):
+        full_entropy_shape = attention_mask.shape
+        if logits.shape[1] != attention_mask.shape[1]:
+            attention_mask = attention_mask[:, -logits.shape[1]:]
         entropy = entropy_from_logits(logits)
         if self.worker.rank_info.cp_size > 1:
             with torch.no_grad():
@@ -312,6 +379,10 @@ class DeepSpeedInferStrategy(InferenceStrategy):
             all_entropy[self.worker.rank_info.cp_rank] = entropy
             entropy = torch.cat(all_entropy, dim=1)
         entropy = entropy[:, :-1] * attention_mask[:, 1:]
+        if entropy.shape[1] != full_entropy_shape[1] - 1:
+            full_entropy = entropy.new_zeros((entropy.shape[0], full_entropy_shape[1] - 1))
+            full_entropy[:, -entropy.shape[1]:] = entropy
+            entropy = full_entropy
         return entropy
 
 
@@ -319,7 +390,7 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
     strategy_name = "deepspeed_train"
 
     def initialize(self, model_provider):
-        assert self.ds_config._stage > 0, "deepspeed train only supports zero > 0."
+        assert self.ds_config._stage >= 0, "deepspeed train only supports zero >= 0."
 
         set_seed(seed=self.worker.pipeline_config.seed)
         deepspeed.init_distributed(timeout=timedelta(minutes=self.worker_config.backend_timeout))
@@ -397,7 +468,8 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
             config=self.worker_config.strategy_args.strategy_config,
             dist_init_required=True,
         )
-        bind_deepspeed_offload_states_func(self.model)
+        if self.ds_config._stage > 0:
+            bind_deepspeed_offload_states_func(self.model)
 
         logger.info(f"{self.model}")
         dist.barrier()
@@ -429,6 +501,34 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
         metrics = {f"{self.worker_config.name}/loss@sum": loss.detach().float().unsqueeze(0)}
         return loss, metrics
 
+    def _global_grad_norm_sq(self) -> torch.Tensor:
+        norm_sq = torch.zeros((), device=current_platform.device_type, dtype=torch.float32)
+        for param in self.model.module.parameters():
+            if param.grad is None:
+                continue
+            grad = param.grad.detach()
+            if grad.is_sparse:
+                grad = grad.coalesce().values()
+            norm_sq = norm_sq + grad.float().pow(2).sum()
+
+        if dist.is_available() and dist.is_initialized():
+            dist.all_reduce(norm_sq, op=dist.ReduceOp.SUM)
+        return norm_sq
+
+    def _skip_zero_grad_update(self, metrics: Dict) -> bool:
+        norm_sq = self._global_grad_norm_sq()
+        if not torch.isfinite(norm_sq) or norm_sq.item() > 0:
+            return False
+
+        logger.warning(
+            f"{self.worker_config.name} skip optimizer step because global gradient norm is zero. "
+            "This can happen when a GRPO group has identical rewards/advantages."
+        )
+        self.model.zero_grad()
+        metrics.update({self.worker_config.name + "/" + "grad_norm": 0.0})
+        metrics.update({self.worker_config.name + "/" + "skip_zero_grad_update": 1.0})
+        return True
+
     def train_step(
         self,
         batch: DataProto,
@@ -455,7 +555,7 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
             input_ids = data.batch["input_ids"]
             attention_mask = data.batch["attention_mask"]
             position_ids = data.batch["position_ids"]
-            forward_args = data.meta_info.get("forward_args", {})
+            forward_args = dict(data.meta_info.get("forward_args", {}))
             # TODO: The offload option may be integrated into the pipeline config in the future.
             is_offload_optimizer_states_in_train_step = data.meta_info.get("is_offload_optimizer_states_in_train_step", True)
             if position_ids.dim() == 3:
@@ -481,6 +581,8 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
                 attention_mask = splited_features["attention_mask"]
                 position_ids = splited_features["position_ids"]
 
+            self._add_logits_to_keep_arg(forward_args, data, input_ids)
+
             output = self.model(
                 input_ids=input_ids, attention_mask=attention_mask, position_ids=position_ids, **forward_args
             )
@@ -492,14 +594,16 @@ class DeepSpeedTrainStrategy(DeepSpeedInferStrategy, TrainStrategy):
             self.model.backward(loss)
 
             is_gradient_accumulation_boundary = self.model.is_gradient_accumulation_boundary()
-            if is_gradient_accumulation_boundary:
+            if is_gradient_accumulation_boundary and self._skip_zero_grad_update(metrics):
+                continue
+            if is_gradient_accumulation_boundary and self.ds_config._stage > 0:
                 self.load_states(include=[OffloadStateType.optimizer_states])
             self.model.step()
             if is_gradient_accumulation_boundary:
                 # global_grad_norm is calculated in optimizer.step thus put it
                 # into metrics after optimizer.step
                 metrics.update({self.worker_config.name + "/" + "grad_norm": self.model.get_global_grad_norm().item()})
-                if is_offload_optimizer_states_in_train_step:
+                if is_offload_optimizer_states_in_train_step and self.ds_config._stage > 0:
                     self.offload_states(include=[OffloadStateType.optimizer_states], non_blocking=True)
         return metrics
 

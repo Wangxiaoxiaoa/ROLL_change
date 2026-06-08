@@ -170,3 +170,27 @@ log
 
 output/
 .vscode/
+# Local ROLL training/runtime artifacts
+.venv-roll-rl/
+logs/
+cache/
+tmp/
+ray_tmp/
+hf_home/
+hf_datasets_cache/
+*.o
+.ninja_deps
+.ninja_log
+build.ninja
+examples/cpu_adam/
+examples/fused_adam/
+examples/output/
+examples/gui_lora_rlvr/output/
+examples/gui_lora_rlvr/logs/
+examples/gui_lora_rlvr/cache/
+examples/gui_lora_rlvr/tmp/
+examples/gui_lora_rlvr/ray_tmp/
+examples/gui_lora_rlvr/hf_home/
+examples/gui_lora_rlvr/hf_datasets_cache/
+examples/gui_lora_rlvr/data/cache/
+examples/gui_lora_rlvr/data/*.jsonl

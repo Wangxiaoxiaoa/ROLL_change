@@ -515,7 +515,7 @@ def default_actor_model_provider(
                 init_kwargs["device_map"] = "balanced"
         logger.info(f"init_kwargs: {init_kwargs}")
         model = load_model(model_args, is_trainable, False)
-        if model.config.pad_token_id is None:
+        if getattr(model.config, "pad_token_id", None) is None:
             model.config.pad_token_id = tokenizer.pad_token_id
         patch_model(model, config, use_mcore=False)
 
@@ -606,7 +606,7 @@ def default_reward_model_provider(
             logger.info("patch AutoModelForCausalLMWithValueHead load_state_dict and forward")
         else:
             raise NotImplementedError
-        if model.config.pad_token_id is None:
+        if getattr(model.config, "pad_token_id", None) is None:
             model.config.pad_token_id = tokenizer.pad_token_id
 
     model_args.model_name_or_path = old_model_name_or_path
@@ -677,7 +677,7 @@ def default_value_model_provider(
             )
         else:
             raise NotImplementedError
-        if model.config.pad_token_id is None:
+        if getattr(model.config, "pad_token_id", None) is None:
             model.config.pad_token_id = tokenizer.pad_token_id
 
     model_args.model_name_or_path = old_model_name_or_path

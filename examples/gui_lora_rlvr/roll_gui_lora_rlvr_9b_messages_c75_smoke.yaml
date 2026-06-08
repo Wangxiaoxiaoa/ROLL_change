@@ -1,0 +1,34 @@
+defaults:
+  - roll_gui_lora_rlvr_9b_messages_c75
+  - _self_
+
+exp_name: gui_lora_rlvr_9b_messages_c75_smoke
+max_steps: 1
+save_steps: 1
+rollout_batch_size: 7
+num_return_sequences_in_group: 8
+prompt_length: 7680
+response_length: 512
+sequence_length: 8192
+
+actor_train:
+  model_args:
+    attn_implementation: fa2
+    disable_gradient_checkpointing: false
+  data_args:
+    file_name: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/data/rl_compressed_v1_messages_prompt_jpeg75_smoke.jsonl
+    domain_interleave_probs:
+      gui_lora_rlvr: 1.0
+    dataset_dir: ./
+    preprocessing_num_workers: null
+    cache_path: /mnt/data0/xiao/RL/ROLL/examples/gui_lora_rlvr/data/cache/rl_compressed_v1_messages_prompt_jpeg75_smoke
+actor_infer:
+  strategy_args:
+    strategy_name: vllm
+    strategy_config:
+      gpu_memory_utilization: 0.8
+      enforce_eager: true
+      block_size: 16
+      max_model_len: ${sequence_length}
+      enable_prefix_caching: false
+      VLLM_USE_V1: 1
